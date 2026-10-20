@@ -1,0 +1,62 @@
+name: Offline candidate checks
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12.13'
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+        with:
+          version: '0.12.3'
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - name: Install locked offline-test dependencies
+        run: uv sync --locked --no-default-groups --group test
+      - name: Build candidate from the clean commit
+        run: |
+          mkdir -p artifacts
+          uv run --locked --no-sync python -m experiments.build_stage2a_candidate --release-gate --output artifacts/ci-candidate | tee artifacts/build.log
+      - name: Verify no torch and replay full evidence arrays
+        run: |
+          uv run --locked --no-sync python -c "import importlib.util; assert importlib.util.find_spec('torch') is None"
+          uv run --locked --no-sync python -m experiments.verify_evidence_zip artifacts/ci-candidate/AI-Infra-Stage2B-Candidate.zip | tee artifacts/integrity.log
+          uv run --locked --no-sync python -m experiments.replay_e012 examples/e012 | tee artifacts/replay.log
+      - name: Offline contract and replay tests
+        run: uv run --locked --no-sync python -m pytest tests/stage2a tests/stage2b -m 'not gpu' --junitxml=artifacts/ci-offline.xml | tee artifacts/tests.log
+      - name: Build and normally install selected wheel
+        run: |
+          uv build artifacts/ci-candidate/source --out-dir artifacts/dist |& tee artifacts/wheel-build.log
+          uv venv --python 3.12 artifacts/wheel-env
+          uv pip install --python artifacts/wheel-env/bin/python artifacts/dist/*.whl
+          project_root="$PWD"
+          cd "$RUNNER_TEMP"
+          "$project_root/artifacts/wheel-env/bin/python" -I -c "import importlib.util; from experiments import replay_e012; assert importlib.util.find_spec('torch') is None; assert 'site-packages' in replay_e012.__file__; print(replay_e012.__file__)"
+          "$project_root/artifacts/wheel-env/bin/python" -I -m experiments.replay_e012 "$project_root/examples/e012" | tee "$project_root/artifacts/installed-replay.log"
+      - name: Record CUDA boundary
+        if: always()
+        run: echo 'CUDA tests NOT RUN — this job validates offline behavior only.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain actual logs and JUnit, including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: offline-release-gate-evidence
+          path: |
+            artifacts/*.log
+            artifacts/*.xml
+            artifacts/ci-candidate/build-receipt.json
+            artifacts/ci-candidate/source/DELIVERY-MANIFEST.json
+            artifacts/ci-candidate/AI-Infra-Stage2B-Candidate.zip
+            artifacts/dist/*.whl
+            artifacts/dist/*.tar.gz
+          if-no-files-found: warn

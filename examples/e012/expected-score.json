@@ -1,0 +1,32 @@
+{
+  "case": "E012",
+  "criteria": {
+    "fallback_encoder_output_nonzero": {
+      "description": "the fully masked slowpath encoder row is finite and non-zero after the declared zero-attention policy",
+      "passed": true
+    },
+    "fully_masked_fastpath_nonfinite_region": {
+      "description": "full values_flat recomputes a non-finite fastpath region only for the fully masked row while row 0 is finite",
+      "passed": true
+    },
+    "negative_controls_finite_and_reference_agree": {
+      "description": "partial and no-mask controls are finite and their reference comparisons pass",
+      "passed": true
+    },
+    "reference_error_stats_and_allclose": {
+      "description": "full values_flat recomputes max/mean absolute error and allclose against CPU and GPU references",
+      "passed": true
+    },
+    "slowpath_intervention_finite_region": {
+      "description": "full values_flat recomputes finite output for the disabled-fastpath intervention",
+      "passed": true
+    }
+  },
+  "expected": {
+    "max_score": 5,
+    "score": 5,
+    "status": "PASS_DEVELOPMENT_EXAMPLE"
+  },
+  "fixture_kind": "development_example",
+  "schema": "stage2a-e012-expected-score-v1"
+}

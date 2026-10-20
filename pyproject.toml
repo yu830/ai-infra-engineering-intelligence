@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools==78.1.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "infra-diagnostic-benchmark"
+version = "0.2.0.dev0"
+description = "Development evidence replay and GPU diagnostic contract checks"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [{name = "Yu Jiacheng"}]
+requires-python = ">=3.12,<3.13"
+dependencies = []
+classifiers = [
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: POSIX :: Linux",
+]
+
+[project.optional-dependencies]
+gpu = ["torch==2.9.1+cu128; sys_platform == 'linux'"]
+
+[dependency-groups]
+test = ["pytest==9.1.1"]
+
+[tool.uv]
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[tool.setuptools]
+packages = []
+py-modules = [
+  "experiments.verify_evidence_zip", "experiments.replay_e012",
+  "experiments.build_stage2a_candidate", "evals.stage2a.__init__", "evals.stage2a.contracts",
+  "evals.stage1e.execution_transport", "evals.stage1e.measure",
+  "evals.stage1d.execution_transport", "evals.stage1d.run_one",
+  "cases.e012.workload_transport_v1",
+]
+include-package-data = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests/stage2a", "tests/stage2b"]
+markers = [
+  "gpu: optional real CUDA execution; absence of CUDA is SKIP, not GPU PASS",
+  "posix: requires the tested POSIX no-follow and process contract",
+]

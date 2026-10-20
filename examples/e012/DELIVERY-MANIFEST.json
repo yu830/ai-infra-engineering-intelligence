@@ -1,0 +1,45 @@
+{
+  "case": "E012",
+  "expected_score": {
+    "max_score": 5,
+    "score": 5
+  },
+  "expected_score_path": "expected-score.json",
+  "external_binary_fingerprints": 0,
+  "files": [
+    {
+      "path": "e012/baseline.json",
+      "sha256": "21deda9f408f59b2cc6364d87af4b9084ecbcfffc1d90e066188c7a479e923ad",
+      "size_bytes": 11673
+    },
+    {
+      "path": "e012/path-control.json",
+      "sha256": "ac4c06d7056950cbda2d780a418b695d58860011e61b92ffa58ba103f1847680",
+      "size_bytes": 24625
+    },
+    {
+      "path": "e012/reference-control.json",
+      "sha256": "af965ea034cd8b9cafc9cd8e8ca291076b8d76ad100ff1f9e958e8b43541d982",
+      "size_bytes": 149987
+    },
+    {
+      "path": "expected-score.json",
+      "sha256": "60ead78c0514904f81e6dbbb71c53008da621819d3157dacaa967eee5ffdeeb1",
+      "size_bytes": 1183
+    },
+    {
+      "path": "frozen-coverage.json",
+      "sha256": "90dc56c8ecc29002f9988003ee1f8f2516187c9c1d837e2cded61bbb8ecae51c",
+      "size_bytes": 557
+    },
+    {
+      "path": "provenance.json",
+      "sha256": "692bce3a9be5144d54e2b6dd1b67191a50dd558459b89df5e5311d3b8947c40a",
+      "size_bytes": 687
+    }
+  ],
+  "fixture_schema": "stage2a-e012-public-fixture-v1",
+  "frozen_paths": 3,
+  "schema": "stage2a-public-delivery-manifest-v1",
+  "scope": "public development fixture; numeric observations and minimal provenance only"
+}

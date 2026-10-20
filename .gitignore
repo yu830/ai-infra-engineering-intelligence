@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.agent-workspace/
+private/
+artifacts/
+*.nsys-rep
+*.sqlite
+*.ncu-rep
+*.egg-info/
+build/
+dist/

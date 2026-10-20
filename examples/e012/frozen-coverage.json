@@ -1,0 +1,17 @@
+[
+  {
+    "archived_as": "e012/baseline.json",
+    "original_path": "case://E012/baseline",
+    "sha256": "21deda9f408f59b2cc6364d87af4b9084ecbcfffc1d90e066188c7a479e923ad"
+  },
+  {
+    "archived_as": "e012/path-control.json",
+    "original_path": "case://E012/path-control",
+    "sha256": "ac4c06d7056950cbda2d780a418b695d58860011e61b92ffa58ba103f1847680"
+  },
+  {
+    "archived_as": "e012/reference-control.json",
+    "original_path": "case://E012/reference-control",
+    "sha256": "af965ea034cd8b9cafc9cd8e8ca291076b8d76ad100ff1f9e958e8b43541d982"
+  }
+]

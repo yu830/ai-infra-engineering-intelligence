@@ -1,0 +1,17 @@
+{
+  "case": "E012",
+  "exact_original_environment_replay": "NOT_RUN",
+  "observation_status": "GPU_OBSERVED",
+  "runner": "first-party E012 runner; public numeric projection",
+  "runtime": {
+    "cuda": "12.8",
+    "cuda_observed": true,
+    "device_class": "CUDA_GPU",
+    "python": "3.12.13",
+    "torch": "2.9.1+cu128"
+  },
+  "schema": "stage2a-e012-public-provenance-v1",
+  "scope": "development fixture imported from an explicitly selected first-party E012 GPU raw observation; no exact original-environment replay",
+  "upstream_url": "https://github.com/pytorch/pytorch/issues/199054",
+  "worker_source_sha256": "42fcbc38eac9570a7c63de25ecf2d4f66a19137be7865d36b2c3e2e4185457e1"
+}
